@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include "arrayEmployees.h"
 #include "utn.h"
 
@@ -45,19 +46,40 @@ int altaEmpleado(eEmployee lista[], int tam, int* pIdEmpleado)
             printf("Se le asigno el id: %d\n", *pIdEmpleado);
             nuevoEmpleado.id=*pIdEmpleado;
 
-            utn_getStringChar(nuevoEmpleado.name, "Ingrese Nombre: \n", "Error ingrese Nombre valido: \n", 2, 20, 3 );
+            if(!utn_getStringChar(nuevoEmpleado.name, "Ingrese Nombre: \n", "Error ingrese Nombre valido: \n", 2, 20, 2 ))
+            {
+                printf("Hubo un problema al cargar el nombre del empleado\n");
+            }
+            else
+            {
+                if(!utn_getStringChar(nuevoEmpleado.lastName, "Ingrese Apellido: \n", "Error ingrese Apellido valido:  \n", 2, 20, 2))
+                {
+                    printf("Hubo un problema al cargar el apellido del empleado\n");
+                }
+                else
+                {
+                    if(!utn_getNumeroFlotante(&nuevoEmpleado.salary, "Ingrese sueldo: \n", "Error ingrese sueldo valido: \n", 0, 500000, 2))
+                    {
+                        printf("Hubo un problema al cargar el salario del empleado\n");
+                    }
+                    else
+                    {
+                        if(!utn_getNumero(&nuevoEmpleado.sector, "Ingrese sector (300 al 304): \n", "Error ingrese sector valido (300 al 304): \n", 300, 304, 2))
+                        {
+                            printf("Hubo un problema al cargar el sector del empleado\n");
+                        }
+                        else
+                        {
+                            nuevoEmpleado.isEmpty=0;
+                            lista[indiceLibre]=nuevoEmpleado;
+                            (*pIdEmpleado)++;
 
-            utn_getStringChar(nuevoEmpleado.lastName, "Ingrese Apellido: \n", "Error ingrese Apellido valido:  \n", 2, 20, 3);
+                            todoOk=1;
 
-            utn_getNumeroFlotante(&nuevoEmpleado.salary, "Ingrese sueldo: \n", "Error ingrese sueldo valido: \n", 0, 500000, 3);
-
-            utn_getNumero(&nuevoEmpleado.sector, "Ingrese sector (300 al 304): \n", "Error ingrese sector valido (300 al 304): \n", 300, 304, 3);
-
-            nuevoEmpleado.isEmpty=0;
-            lista[indiceLibre]=nuevoEmpleado;
-            (*pIdEmpleado)++;
-
-            todoOk=1;
+                        }
+                    }
+                }
+            }
         }
     }
     return todoOk;
@@ -65,7 +87,7 @@ int altaEmpleado(eEmployee lista[], int tam, int* pIdEmpleado)
 
 int InicializarEmpleados(eEmployee lista[], int tam)
 {
-   int todoOk=0;
+    int todoOk=0;
 
     if(lista!=NULL && tam>0)
     {
@@ -138,58 +160,58 @@ int ordenarEmpleados(eEmployee lista[], int tam)
 
     eEmployee auxiliar;
 
-     if(lista!=NULL && tam>0)
-     {
+    if(lista!=NULL && tam>0)
+    {
 
-            printf("Seleccion de informes\n");
-            printf("1) Ordenar Empleados\n");
-            printf("2) Total y promedio de salarios\n");
-            utn_getNumero(&opcion, "Escoja opcion u otro numero para salir: \n", "Error ingrese una opcion valida (1 o 2): \n", 1, 2, 3);
+        printf("Seleccion de informes\n");
+        printf("1) Ordenar Empleados\n");
+        printf("2) Total y promedio de salarios\n");
+        utn_getNumero(&opcion, "Escoja opcion u otro numero para salir: \n", "Error ingrese una opcion valida (1 o 2): \n", 1, 2, 3);
 
-            switch(opcion)
+        switch(opcion)
+        {
+        case 1:
+            printf("\nOrdenar empleados por Apellido y Sector\n");
+            printf("1) Ascendente\n");
+            printf("2) Descendente\n");
+            utn_getNumero(&criterio, "Elija criterio de ordenamiento: \n", "Error, Elija criterio de ordenamiento (1 o 2): \n", 1, 2, 3);
+
+            for(int i=0; i<tam-1; i++)
             {
-            case 1:
-                printf("\nOrdenar empleados por Apellido y Sector\n");
-                printf("1) Ascendente\n");
-                printf("2) Descendente\n");
-                utn_getNumero(&criterio, "Elija criterio de ordenamiento: \n", "Error, Elija criterio de ordenamiento (1 o 2): \n", 1, 2, 3);
-
-                for(int i=0; i<tam-1; i++)
+                for(int j=i+1; j<tam; j++)
                 {
-                    for(int j=i+1; j<tam; j++)
+                    if((criterio==1 && lista[i].sector>lista[j].sector) || (criterio==2 && lista[i].sector<lista[j].sector) )
                     {
-                        if((criterio==1 && lista[i].sector>lista[j].sector) || (criterio==2 && lista[i].sector<lista[j].sector) )
-                        {
-                            auxiliar=lista[i];
-                            lista[i]=lista[j];
-                            lista[j]=auxiliar;
-                        }
+                        auxiliar=lista[i];
+                        lista[i]=lista[j];
+                        lista[j]=auxiliar;
                     }
                 }
-
-                for(int i=0; i<tam-1; i++)
-                {
-                    for(int j=i+1; j<tam; j++)
-                    {
-                        if((criterio==1 && lista[i].sector==lista[j].sector && strcmp(lista[i].lastName, lista[j].lastName)>0) || (criterio==2 && lista[i].sector==lista[j].sector && strcmp(lista[i].lastName, lista[j].lastName)<0))
-                        {
-                            auxiliar=lista[i];
-                            lista[i]=lista[j];
-                            lista[j]=auxiliar;
-                        }
-                    }
-                }
-                todoOk=1;
-                printf("Se ordeno exitosamente!!\n");
-                mostrarEmpleados(lista, tam);
-
-                break;
-            case 2:
-                totalSalario(lista, tam);
-                break;
-            default:
-                break;
             }
+
+            for(int i=0; i<tam-1; i++)
+            {
+                for(int j=i+1; j<tam; j++)
+                {
+                    if((criterio==1 && lista[i].sector==lista[j].sector && strcmp(lista[i].lastName, lista[j].lastName)>0) || (criterio==2 && lista[i].sector==lista[j].sector && strcmp(lista[i].lastName, lista[j].lastName)<0))
+                    {
+                        auxiliar=lista[i];
+                        lista[i]=lista[j];
+                        lista[j]=auxiliar;
+                    }
+                }
+            }
+            todoOk=1;
+            printf("Se ordeno exitosamente!!\n");
+            mostrarEmpleados(lista, tam);
+
+            break;
+        case 2:
+            totalSalario(lista, tam);
+            break;
+        default:
+            break;
+        }
     }
 
     return todoOk;
@@ -207,40 +229,40 @@ int bajaEmpleado(eEmployee lista[], int tam)
         system("cls");
         printf("**** Baja Empleado ****\n");
 
-    if(mostrarEmpleados(lista, tam))
-    {
-
-
-
-        printf("Ingrese id de empleado a dar de baja: ");
-        scanf("%d", &legajo);
-
-        indice=buscarEmpleado(lista, tam, legajo);
-
-        if(indice==-1)
+        if(mostrarEmpleados(lista, tam))
         {
-            printf("No existe empleado con ese numero de legajo\n");
-        }
-        else
-        {
-            printf("  id     Nombre     Apellido     Sueldo  Sector\n ");
-            printf("%d %10s   %10s   %.2f     %d\n", lista[indice].id, lista[indice].name, lista[indice].lastName, lista[indice].salary, lista[indice].sector);
-            printf("Confirma baja?: ");
-            fflush(stdin);
-            scanf("%c", &confirma);
 
-            if(confirma=='s')
+
+
+            printf("Ingrese id de empleado a dar de baja: ");
+            scanf("%d", &legajo);
+
+            indice=buscarEmpleado(lista, tam, legajo);
+
+            if(indice==-1)
             {
-                lista[indice].isEmpty=1;
-                printf("Baja exitosa!!\n");
-                todoOk=1;
+                printf("No existe empleado con ese numero de legajo\n");
             }
             else
             {
-                printf("Baja cancelada!!\n");
+                printf("  id     Nombre     Apellido     Sueldo  Sector\n ");
+                printf("%d %10s   %10s   %.2f     %d\n", lista[indice].id, lista[indice].name, lista[indice].lastName, lista[indice].salary, lista[indice].sector);
+                printf("Confirma baja?: ");
+                fflush(stdin);
+                scanf("%c", &confirma);
+
+                if(confirma=='s')
+                {
+                    lista[indice].isEmpty=1;
+                    printf("Baja exitosa!!\n");
+                    todoOk=1;
+                }
+                else
+                {
+                    printf("Baja cancelada!!\n");
+                }
             }
         }
-    }
         system("pause");
     }
     return todoOk;
@@ -281,63 +303,69 @@ int modificarEmpleado(eEmployee lista[], int tam)
 
         if(mostrarEmpleados(lista, tam))
         {
-            printf("Ingrese id a Modificar: ");
-            scanf("%d", &legajo);
-
-            indice=buscarEmpleado(lista, tam, legajo);
-
-            if(indice==-1)
+            if(!utn_getNumero(&legajo, "Ingrese id a Modificar: \n", "Error, ingrese legajo valido: \n", 0, 2000, 2))
             {
-                printf("No existe un empleado con el numero de id: %d\n", legajo);
+                printf("Legajo invalido\n");
             }
             else
             {
-                printf("  id    Nombre    Apellido    Sueldo  Sector\n");
+                indice=buscarEmpleado(lista, tam, legajo);
 
-                printf(" %d%10s  %10s  %.2f     %d\n", lista[indice].id, lista[indice].name, lista[indice].lastName, lista[indice].salary, lista[indice].sector);
-                printf("\n\n");
-                printf("Informacion del Empleado:\n");
-                printf("1) Nombre\n");
-                printf("2) Apellido\n");
-                printf("3) Sueldo\n");
-                printf("4) Sector\n");
-
-                printf("Que dato desea Modificar?: ");
-                scanf("%d", &opcion);
-
-                printf("Confirma opcion?: \n");
-                fflush(stdin);
-                scanf("%c", &confirma);
-
-                if(confirma=='s')
+                if(indice==-1)
                 {
-                    switch(opcion)
-                    {
-                    case 1:
-                        printf("Modificar nombre: ");
-                        scanf("%s", lista[indice].name);
-                        break;
-                    case 2:
-                        printf("Modificar Apellido: ");
-                        scanf("%s", lista[indice].lastName);
-                        break;
-                    case 3:
-                        printf("Modificar sueldo: ");
-                        scanf("%f", &lista[indice].salary);
-                        break;
-                    case 4:
-                        printf("Modificar sector: ");
-                        scanf("%d", &lista[indice].sector);
-                        break;
-                    }
-                    todoOk=1;   //cuando la modificacion se hizo correctamente cambio el valor del retorno a 1 indicando que se hizo exitosamente
+                    printf("No existe un empleado con el numero de id: %d\n", legajo);
                 }
                 else
                 {
-                    printf("Modificacion cancelada!\n");
-                }
+                    printf("  id    Nombre    Apellido    Sueldo  Sector\n");
 
+                    printf(" %d%10s  %10s  %.2f     %d\n", lista[indice].id, lista[indice].name, lista[indice].lastName, lista[indice].salary, lista[indice].sector);
+                    printf("\n\n");
+                    printf("Informacion del Empleado:\n");
+                    printf("1) Nombre\n");
+                    printf("2) Apellido\n");
+                    printf("3) Sueldo\n");
+                    printf("4) Sector\n");
+
+                    printf("Que dato desea Modificar?: ");
+                    scanf("%d", &opcion);
+
+                    printf("Confirma opcion?: \n");
+                    fflush(stdin);
+                    scanf("%c", &confirma);
+
+                    if(confirma=='s')
+                    {
+                        switch(opcion)
+                        {
+                        case 1:
+                            printf("Modificar nombre: ");
+                            scanf("%s", lista[indice].name);
+                            break;
+                        case 2:
+                            printf("Modificar Apellido: ");
+                            scanf("%s", lista[indice].lastName);
+                            break;
+                        case 3:
+                            printf("Modificar sueldo: ");
+                            scanf("%f", &lista[indice].salary);
+                            break;
+                        case 4:
+                            printf("Modificar sector: ");
+                            scanf("%d", &lista[indice].sector);
+                            break;
+                        }
+                        todoOk=1;   //cuando la modificacion se hizo correctamente cambio el valor del retorno a 1 indicando que se hizo exitosamente
+                    }
+                    else
+                    {
+                        printf("Modificacion cancelada!\n");
+                    }
+
+                }
             }
+
+
         }
 
     }

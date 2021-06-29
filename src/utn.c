@@ -48,8 +48,9 @@ int utn_getNumeroFlotante(float* pResultado, char* mensaje, char* mensajeError, 
 
     while(reintentos>0)
     {
-        printf(mensaje);
-        if(scanf("%f", &num)==1)
+        printf("%s", mensaje);
+        fflush(stdin);
+        if(getFloat(&num)==1)
         {
             if(num<=maximo && num>=minimo)
             {
@@ -73,7 +74,21 @@ int utn_getNumeroFlotante(float* pResultado, char* mensaje, char* mensajeError, 
     }
 
     return ret;
+}
 
+int getFloat(float* pResultado)
+{
+    int ret=-1;
+    char buffer[64];
+
+    myGets(buffer, sizeof(buffer));
+    if(esNumerica(buffer))
+    {
+        *pResultado = atof(buffer);
+        ret=1;
+    }
+
+    return ret;
 
 }
 
@@ -204,11 +219,13 @@ int utn_getStringChar(char pResultado[], char* mensaje, char* mensajeError, char
             }
             else //sino descuento un intento
             {
+                retorno=0;
                 printf("%s", mensajeError);
                 reintentos--;
 
             }
-        }while(reintentos>=0);
+        }
+        while(reintentos>=0);
 
     }
 
@@ -222,7 +239,8 @@ int utn_getSexo(char* pResultado, char* mensaje, char* mensajeError, int reinten
 
     if(pResultado!=NULL && mensaje!=NULL && mensajeError!=NULL && reintentos>=0)
     {
-        do{
+        do
+        {
             printf("%s", mensaje);
             fflush(stdin);
             scanf("%c", &buffer);
@@ -239,7 +257,8 @@ int utn_getSexo(char* pResultado, char* mensaje, char* mensajeError, int reinten
                 reintentos--;
 
             }
-            }while(reintentos>=0);
+        }
+        while(reintentos>=0);
     }
     return todoOk;
 }
@@ -252,7 +271,8 @@ int utn_getTelefono(char* pResultado, char* mensaje, char* mensajeError, int max
 
     if(pResultado!=NULL && mensaje!=NULL && mensajeError!=NULL && reintentos>=0)
     {
-        do{
+        do
+        {
 
             printf("%s", mensaje);
             fflush(stdin);
@@ -271,10 +291,44 @@ int utn_getTelefono(char* pResultado, char* mensaje, char* mensajeError, int max
                 reintentos--;
             }
 
-            }while(reintentos>=0);
+        }
+        while(reintentos>=0);
 
     }
 
+
+    return todoOk;
+}
+
+int confirmacion(char* pResultado, char* mensaje, char* mensajeError, int reintentos)
+{
+    int todoOk=0;
+    char opcion;
+
+    if(pResultado!=NULL && mensaje!=NULL && mensajeError!=NULL &&  reintentos>0)
+    {
+        while(reintentos>0)
+        {
+            printf("%s", mensaje);
+            fflush(stdin);
+            scanf("%c", &opcion);
+
+
+            if(opcion=='s' || opcion=='n')
+            {
+                *pResultado=opcion;
+                todoOk=1;
+                reintentos=0;
+            }
+            else
+            {
+                printf("%s", mensajeError);
+                reintentos--;
+
+            }
+
+        }
+    }
 
     return todoOk;
 }

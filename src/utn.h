@@ -37,7 +37,21 @@ int utn_getNumero(int* pResultado, char* mensaje, char* mensajeError, int minimo
  */
 int utn_getNumeroFlotante(float* pResultado, char* mensaje, char* mensajeError, float minimo, float maximo, int reintentos);
 
+/** \brief
+ *
+ * \param pResultado int*
+ * \return int
+ *
+ */
 int getInt(int* pResultado);
+
+/** \brief
+ *
+ * \param pResultado int*
+ * \return int
+ *
+ */
+int getFloat(float* pResultado);
 
 /**
 * \brief Verifica si la cadena ingresada es numerica
@@ -90,7 +104,16 @@ int verifica(void);
  * \return int
  *
  */
-int utn_getNumeroFlotante(float* pResultado, char* mensaje, char* mensajeError, float minimo, float maximo, int reintentos);
+//int utn_getNumeroFlotante(float* pResultado, char* mensaje, char* mensajeError, float minimo, float maximo, int reintentos);
+
+/** \brief
+ *
+ * \param pResultado float*
+ * \return int
+ *
+ */
+//int getFloat(float* pResultado);
+
 
 /** \brief Solicita un string al usuario, despues de verificarlo copia el resultado en la variable indicada
  *
@@ -127,4 +150,6 @@ int utn_getSexo(char* pResultado, char* mensaje, char* mensajeError, int reinten
  *
  */
 int utn_getTelefono(char* pResultado, char* mensaje, char* mensajeError, int maximoCaracteres, int reintentos);
+
+int confirmacion(char* pResultado, char* mensaje, char* mensajeError, int reintentos);
 
