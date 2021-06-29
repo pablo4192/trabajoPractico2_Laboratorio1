@@ -1,0 +1,26 @@
+# depslib dependency file v1.0
+1621796168 source:c:\users\kiano\desktop\programacion\trabajopractico2\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"arrayEmployees.h"
+	"utn.h"
+
+1621115277 c:\users\kiano\desktop\programacion\trabajopractico2\arrayemployees.h
+
+1621792705 source:c:\users\kiano\desktop\programacion\trabajopractico2\arrayemployees.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"arrayEmployees.h"
+	"utn.h"
+
+1621791237 source:c:\users\kiano\desktop\programacion\trabajopractico2\utn.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+	"utn.h"
+
+1621791234 c:\users\kiano\desktop\programacion\trabajopractico2\utn.h
+
